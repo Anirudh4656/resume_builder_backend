@@ -1,9 +1,9 @@
 import { check } from "express-validator";
-import  { User,UserRole } from "../../schemas/User";
+import { User, UserRole } from "../../schemas/User";
 
 export const userLogin = [
   check("email")
-    .exists({ checkFalsy:true })
+    .exists({ checkFalsy: true })
     .notEmpty()
     .bail()
     .withMessage("Email is required")
@@ -11,7 +11,7 @@ export const userLogin = [
     .bail()
     .withMessage("Enter valid email"),
   check("password")
-    .exists({  checkFalsy:true })
+    .exists({ checkFalsy: true })
     .notEmpty()
     .bail()
     .withMessage("Password is required"),
@@ -53,11 +53,7 @@ export const create = [
       return true;
     }),
   password,
-  check("username")
-    .notEmpty()
-    .bail()
-    .withMessage("Please enter username")
-    
+  check("username").notEmpty().bail().withMessage("Please enter username"),
 ];
 
 export const createUserWithLink = [

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { type NextFunction, type Request, type Response } from "express";
 import expressAsyncHandler from "express-async-handler";
-import { type IUser, User, UserRole } from "../schemas/User";
+import { type IUser, UserRole } from "../schemas/User";
 import createHttpError from "http-errors";
 interface AuthRequest extends Request {
   user?: any;
@@ -12,12 +12,13 @@ export const roleAuth = (
 ): any =>
   expressAsyncHandler(
     async (req: AuthRequest, res: Response, next: NextFunction) => {
-      
+  
       if (publicRoutes.includes(req.path)) {
-        console.log("passed in routes");
+        console.log("passed");
         next();
         return;
       }
+
       let token = req.headers["authorization"]?.replace("Bearer ", "");
 
       if (!token) {
@@ -26,27 +27,25 @@ export const roleAuth = (
         });
       }
 
-     const decodedUser = jwt.verify(token!, process.env.SECRET_KEY!) as IUser;
-   const userValue= User.findById(decodedUser._id);
-   console.log("in user value:",userValue,decodedUser);
+      const decodedUser = jwt.verify(token!, "dghfghghjghjghjghj"!) as IUser;
+
       if (
         decodedUser.role == null ||
         !Object.values(UserRole).includes(decodedUser.role)
       ) {
         throw createHttpError(401, { message: "Invalid user role" });
       }
-     
       console.log("in roles include", roles.includes(decodedUser.role));
-      // if (!roles.includes(decodedUser.role)) {
-      //   console.log("in roles include");
-      //   const type =
-      //     decodedUser.role.slice(0, 1) +
-      //     decodedUser.role.slice(1).toLocaleLowerCase();
+      if (!roles.includes(decodedUser.role)) {
+        console.log("in roles include");
+        const type =
+          decodedUser.role.slice(0, 1) +
+          decodedUser.role.slice(1).toLocaleLowerCase();
 
-      //   throw createHttpError(401, {
-      //     message: `${type} can not access this resource`,
-      //   });
-      // }
+        throw createHttpError(401, {
+          message: `${type} can not access this resource`,
+        });
+      }
       req.user = decodedUser;
       next();
     }

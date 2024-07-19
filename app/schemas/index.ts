@@ -1,5 +1,5 @@
 export interface BaseSchema {
-    _id:string;
-    createdAt:Date;
-    updatedAt:Date;
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
