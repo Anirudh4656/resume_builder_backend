@@ -19,6 +19,6 @@ router.post(
   expressAsyncHandler(registerUser)
 );
 
-// router.put("/:id", updateUser);
+
 
 export default router;
